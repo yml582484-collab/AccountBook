@@ -28,7 +28,7 @@
 
 ```bash
 # 克隆項目
-git clone https://github.com/yourusername/account-book.git
+git clone https://github.com/yml582484-collab/AccountBook.git
 cd account-book
 
 # 安裝依賴
@@ -177,7 +177,7 @@ eas build --platform android
 
 ## 👤 作者
 
-- GitHub: [@yourusername](https://github.com/yourusername)
+- GitHub: [@yml582484-collab](https://github.com/yml582484-collab)
 
 ## 🙏 致謝
 
