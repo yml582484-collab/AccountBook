@@ -56,7 +56,7 @@ export default function AddTransactionScreen({ navigation }: AddTransactionScree
       type,
       categoryId,
       note: note.trim(),
-      date: date.toISOString(),
+      date: new Date(date.getFullYear(), date.getMonth(), date.getDate()).toISOString(),
       createdAt: new Date().toISOString(),
     };
 

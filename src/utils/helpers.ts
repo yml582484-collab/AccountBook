@@ -10,7 +10,9 @@ export function getTransactionsForMonth(
 ): Transaction[] {
   return transactions.filter(t => {
     const d = new Date(t.date);
-    return d.getFullYear() === year && d.getMonth() === month;
+    const transactionYear = d.getFullYear();
+    const transactionMonth = d.getMonth();
+    return transactionYear === year && transactionMonth === month;
   });
 }
 

@@ -45,14 +45,14 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   const monthIncome = useMemo(() => getTotalIncome(monthTransactions), [monthTransactions]);
   const monthExpense = useMemo(() => getTotalExpense(monthTransactions), [monthTransactions]);
 
-  // 过滤后的交易
+  // 过滤后的交易（基于本月交易）
   const filteredTransactions = useMemo(() => {
-    let list = transactions;
+    let list = monthTransactions;
     if (filter) {
       list = list.filter(t => t.type === filter);
     }
     return list;
-  }, [transactions, filter]);
+  }, [monthTransactions, filter]);
 
   // 按日期分组
   const grouped = useMemo(() => groupByDate(filteredTransactions), [filteredTransactions]);
@@ -236,8 +236,10 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   summaryAmount: {
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: '700',
+    numberOfLines: 1,
+    adjustsFontSizeToFit: true,
   },
   summaryDivider: {
     width: 1,
