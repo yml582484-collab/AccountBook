@@ -146,7 +146,3 @@ eas build --platform android  # 构建 Android 安装包
 ---
 
 *If this project helps you, please give it a ⭐️ Star!*
-
-```
-
-```
