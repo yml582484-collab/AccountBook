@@ -26,7 +26,16 @@
       "favicon": "./assets/favicon.png"
     },
     "scheme": "accountbook",
-
-    "newArchEnabled": true
+    "newArchEnabled": true,
+    "extra": {
+      "eas": {
+        "projectId": "928f78e6-44ab-4e94-8aea-c3b99bb22ccf"
+      }
+    },
+    "owner": "lym629",
+    "runtimeVersion": "exposdk:54.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/928f78e6-44ab-4e94-8aea-c3b99bb22ccf"
+    }
   }
 }
