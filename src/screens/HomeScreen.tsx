@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,10 @@ import {
   FlatList,
   RefreshControl,
   Alert,
+  Platform,
+  StatusBar,
+  BackHandler,
+  ToastAndroid,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTransactions } from '../data/TransactionContext';
@@ -31,6 +35,27 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   const { transactions, loading, refresh, removeTransaction } = useTransactions();
   const [filter, setFilter] = useState<TransactionType | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const lastBackPress = useRef(0);
+
+  useEffect(() => {
+    const handleBackPress = () => {
+      const now = Date.now();
+      if (now - lastBackPress.current < 2000) {
+        BackHandler.exitApp();
+        return true;
+      }
+      lastBackPress.current = now;
+      if (Platform.OS === 'android') {
+        ToastAndroid.show('再按一次退出记账本', ToastAndroid.SHORT);
+      }
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    };
+  }, []);
 
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -195,6 +220,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   summaryCard: {
     margin: 16,

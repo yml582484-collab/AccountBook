@@ -8,8 +8,9 @@ import {
   StyleSheet,
   Alert,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useTransactions } from '../data/TransactionContext';
 import {
@@ -27,6 +28,7 @@ interface AddTransactionScreenProps {
 
 export default function AddTransactionScreen({ navigation }: AddTransactionScreenProps) {
   const { addTransaction } = useTransactions();
+  const insets = useSafeAreaInsets();
   const [type, setType] = useState<TransactionType>('expense');
   const [amount, setAmount] = useState('');
   const [categoryId, setCategoryId] = useState('food');
@@ -73,8 +75,12 @@ export default function AddTransactionScreen({ navigation }: AddTransactionScree
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
       {/* 顶部栏 */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
         <TouchableOpacity 
           onPress={() => navigation.goBack()} 
           style={styles.cancelBtn}
@@ -205,6 +211,7 @@ export default function AddTransactionScreen({ navigation }: AddTransactionScree
           />
         )}
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -220,11 +227,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 12,
-    paddingTop: 50,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#E0E0E0',
-    minHeight: 90,
   },
   cancelBtn: {
     paddingHorizontal: 16,

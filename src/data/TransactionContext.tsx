@@ -24,6 +24,7 @@ export function TransactionProvider({ children }: { children: React.ReactNode })
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // 初始化加载和手动下拉刷新时使用
   const refresh = useCallback(async () => {
     setLoading(true);
     const data = await loadTransactions();
@@ -35,14 +36,18 @@ export function TransactionProvider({ children }: { children: React.ReactNode })
     refresh();
   }, [refresh]);
 
+  // 【修复核心】：添加记录时，先存硬盘，再直接修改内存状态，实现秒刷
   const addTransaction = async (t: Transaction) => {
     await storageAdd(t);
-    await refresh();
+    // 使用前一个状态(prev)将新记录放在最前面，替代之前的 await refresh()
+    setTransactions(prevTransactions => [t, ...prevTransactions]);
   };
 
+  // 【修复核心】：删除记录时，同样直接在内存中过滤掉该项，实现秒删
   const removeTransaction = async (id: string) => {
     await storageDelete(id);
-    await refresh();
+    // 过滤掉被删除的 ID，替代之前的 await refresh()
+    setTransactions(prevTransactions => prevTransactions.filter(item => item.id !== id));
   };
 
   const clearAll = async () => {
